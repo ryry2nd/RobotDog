@@ -16,10 +16,10 @@ class Listen:
         try:
             query = self.rec.recognize_google(audio, language="en-in")
         except UnknownValueError:
-            return ""
+            return "", ""
         
         self.keyword.extract_keywords_from_text(query)
-        self.word = query
+        self.word = query.lower()
         return query, self.getKeywords()
     
     def isKeyword(self, str):

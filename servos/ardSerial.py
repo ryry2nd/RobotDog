@@ -471,6 +471,10 @@ skillFullName = {
          'ts': 'testServo',
          'wh': 'waveHead',
          'zz': 'zz',
+         "wkF": 'forward',
+         "wkB": 'backward',
+         "wkL": 'left',
+         "wkR": 'right', 
          }
              
 model = 'Bittle'
