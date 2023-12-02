@@ -11,7 +11,7 @@ class Listen:
     def listen(self):
         with sr.Microphone() as source:
             self.rec.adjust_for_ambient_noise(source)
-            audio = self.r.listen(source)
+            audio = self.rec.listen(source)
 
         try:
             query = self.rec.recognize_google(audio, language="en-in")

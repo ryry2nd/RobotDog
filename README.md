@@ -7,5 +7,6 @@ Import requirements
 Run these commands  
 ```
 sudo apt install espeak  
+sudo apt install flac  
 python -c "import nltk; nltk.download('stopwords')"
 ```
