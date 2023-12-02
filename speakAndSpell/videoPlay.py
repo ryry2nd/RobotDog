@@ -78,5 +78,8 @@ class VideoPlayer:
         self.voice.setProperty('volume', volume)
 
     def say(self, text):
+        self.voice.stop()
         self.voice.say(text)
-        self.voice.runAndWait()
+    
+    def stopVoice(self):
+        self.voice.stop()

@@ -1,10 +1,9 @@
-from servos import Servos, longToShort, shortToLong, isWord
+from servos import Servos, longToShort, isWord
 from speakAndSpell import VideoPlayer, Listen
-from TerminateThread import StoppableThread
 
 vp = VideoPlayer()
 l = Listen()
-s = Servos(['g', .1], ['z', .1])
+s = Servos(['g', 0], ['z', 0])
 
 def main():
     try:
@@ -12,7 +11,7 @@ def main():
             word, keyword = l.listen()
 
             if isWord(word):
-                s.command(['k' + longToShort(word), '.1'])
+                s.command(['k' + longToShort(word), .1])
 
     except KeyboardInterrupt:
         return
