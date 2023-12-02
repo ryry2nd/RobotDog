@@ -1,2 +1,7 @@
 # RobotDog
 its a robot and a dog
+## Setup
+Import requirements  
+`pip install -r requirements.txt`  
+  
+Run setup.sh
