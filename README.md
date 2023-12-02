@@ -4,4 +4,8 @@ its a robot and a dog
 Import requirements  
 `pip install -r requirements.txt`  
   
-Run setup.sh
+Run these commands  
+```
+sudo apt install espeak  
+python -c "import nltk; nltk.download('stopwords')"
+```
