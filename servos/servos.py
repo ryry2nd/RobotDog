@@ -1,5 +1,5 @@
 from servos.ardSerial import keepCheckingPort, connectPort, send, closeAllSerial
-from TerminateThread import StoppableThread
+from servos.TerminateThread import StoppableThread
 
 class Servos:
     def __init__(self, *send):

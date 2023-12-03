@@ -11,14 +11,13 @@ import copy
 import threading
 import os
 import servos.config as config
+import tkinter as tk
 
-if not config.useMindPlus:
-    import tkinter as tk
-    sys.path.append("../pyUI")
-    from servos.translate import *
-    language = languageList['English']
-    def txt(key):
-        return language.get(key, textEN[key])
+sys.path.append("../pyUI")
+from servos.translate import *
+language = languageList['English']
+def txt(key):
+    return language.get(key, textEN[key])
 
 FORMAT = '%(asctime)-15s %(name)s - %(levelname)s - %(message)s'
 '''
@@ -335,60 +334,6 @@ def closeAllSerial(ports, clearPorts=True):
     if clearPorts is True:
         ports.clear()
 
-
-balance = [
-    1, 0, 0, 1,
-    0, 0, 0, 0, 0, 0, 0, 0, 30, 30, 30, 30, 30, 30, 30, 30]
-buttUp = [
-    1, 0, 15, 1,
-    20, 40, 0, 0, 5, 5, 3, 3, 90, 90, 45, 45, -60, -60, 5, 5]
-calib = [
-    1, 0, 0, 1,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-dropped = [
-    1, 0, -75, 1,
-    0, 30, 0, 0, -5, -5, 15, 15, -75, -75, 45, 45, 60, 60, -30, -30]
-lifted = [
-    1, 0, 75, 1,
-    0, -20, 0, 0, 0, 0, 0, 0, 60, 60, 75, 75, 45, 45, 75, 75]
-rest = [
-    1, 0, 0, 1,
-    -30, -80, -45, 0, -3, -3, 3, 3, 70, 70, 70, 70, -55, -55, -55, -55]
-sit = [
-    1, 0, -30, 1,
-    0, 0, -45, 0, -5, -5, 20, 20, 45, 45, 105, 105, 45, 45, -45, -45]
-stretch = [
-    1, 0, 20, 1,
-    0, 30, 0, 0, -5, -5, 0, 0, -75, -75, 30, 30, 60, 60, 0, 0]
-zero = [
-    1, 0, 0, 1,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-balanceNybble = [
-    1, 0, 0, 1,
-    0, 0, 0, 0, 0, 0, 0, 0, 30, 30, -30, -30, 30, 30, -30, -30, ]
-buttUpNybble = [
-    1, 0, 15, 1,
-    20, 40, 0, 0, 5, 5, 3, 3, 90, 90, -45, -45, -60, -60, -5, -5, ]
-droppedNybble = [
-    1, 0, 75, 1,
-    0, 30, 0, 0, -5, -5, 15, 15, -75, -75, -60, -60, 60, 60, 30, 30, ]
-liftedNybble = [
-    1, 0, -75, 1,
-    0, -70, 0, 0, 0, 0, 0, 0, 55, 55, 20, 20, 45, 45, 0, 0, ]
-restNybble = [
-    1, 0, 0, 1,
-    -30, -80, -45, 0, -3, -3, 3, 3, 60, 60, -60, -60, -45, -45, 45, 45, ]
-sitNybble = [
-    1, 0, -20, 1,
-    10, -20, -60, 0, -5, -5, 20, 20, 30, 30, -90, -90, 60, 60, 45, 45, ]
-strNybble = [
-    1, 0, 15, 1,
-    10, 70, -30, 0, -5, -5, 0, 0, -75, -75, -45, -45, 60, 60, -45, -45, ]
-zeroNybble = [
-    1, 0, 0, 1,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]
-
 postureTableBittle = {
     "balance": balance,
     "buttUp": buttUp,
@@ -398,34 +343,6 @@ postureTableBittle = {
     "sit": sit,
     "str": stretch,
     "zero": zero
-}
-
-postureTableNybble = {
-    "balance": balanceNybble,
-    "buttUp": buttUpNybble,
-    "dropped": droppedNybble,
-    "lifted": liftedNybble,
-    "rest": restNybble,
-    "sit": sitNybble,
-    "str": strNybble,
-    "zero": zeroNybble
-}
-postureTableDoF16 = {
-    "balance": balance,
-    "rest": rest,
-    "zero": zero,
-    "sit": sit,
-    "str": stretch,
-    "dropped": dropped,
-    "buttUp": buttUp,
-    "lifted": lifted,
-}
-
-postureDict = {
-    'Nybble': postureTableNybble,
-    'Bittle': postureTableBittle,
-    'Bittle X': postureTableBittle,
-    'DoF16': postureTableDoF16
 }
 
 skillFullName = {

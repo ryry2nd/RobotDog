@@ -75,11 +75,11 @@ class VideoPlayer:
     def setVolume(self, volume:int):
         self.volume = volume
         self.player.audio_set_volume(volume)
-        self.voice.setProperty('volume', volume)
+        self.voice.setProperty('volume', volume/100)
 
     def say(self, text):
-        self.voice.stop()
         self.voice.say(text)
+        self.voice.runAndWait()
     
     def stopVoice(self):
         self.voice.stop()
