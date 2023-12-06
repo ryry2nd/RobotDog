@@ -3,7 +3,7 @@ from servos.ardSerial import skillFullName
 reversedSkillFullName = {}
 
 for d, data in skillFullName.items():
-    reversedSkillFullName[d] = data
+    reversedSkillFullName[data] = d
 
 def shortToLong(st: str):
     return skillFullName.get(st.strip())

@@ -16,10 +16,10 @@ class VideoPlayer:
 
         self.setVolume(volume)
 
-    def generate_stream_url(URL):
+    def generate_stream_url(self, url):
         ydl_opts = {"quiet": True}
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(URL, download=False)
+            info = ydl.extract_info(url, download=False)
             url_list = []
             counter = -1
             for format in info["formats"]:
