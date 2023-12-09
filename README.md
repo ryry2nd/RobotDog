@@ -19,3 +19,12 @@ If you want a certain voice go find voice clips of the person for instance Morga
   
 Click the link for more info about the AI voice software  
 https://github.com/neonbjb/tortoise-tts
+
+### GPT4All instructions
+For the robot to be able to think for itself you have to download a model from the GPT4All website  
+The model I downloaded was `gpt4all-falcon-q4_0.gguf`  
+
+To download a model go down to the Model Explorer section on the GPT4All website: https://gpt4all.io/index.html  
+Any model should work but I haven't tested it.  
+
+Be sure to put the file into this path: `Assets/aiModel`
