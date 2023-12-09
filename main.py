@@ -47,9 +47,6 @@ def main():
                 
                 elif isWord(query):
                     s.command(['k' + longToShort(query), .1])
-
-    except KeyboardInterrupt:
-        return
     except Exception as e:
         s.exit()
         raise e
@@ -57,4 +54,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-#s.exit()
+s.exit()
