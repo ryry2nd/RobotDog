@@ -27,4 +27,6 @@ The model I downloaded was `gpt4all-falcon-q4_0.gguf`
 To download a model go down to the Model Explorer section on the GPT4All website: https://gpt4all.io/index.html  
 Any model should work but I haven't tested it.  
 
-Be sure to put the file into this path: `Assets/aiModel`
+Be sure to put the file into this path: `Assets/aiModel`  
+  
+Don't forget to edit the .env file accordingly.
