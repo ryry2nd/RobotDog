@@ -2,8 +2,8 @@ from tortoise import utils
 from tortoise.api import TextToSpeech
 import os, vlc, torchaudio
 
-VOICE_PATH = os.path.join("speakAndSpell", "voiceLines")
-CACHE_PATH = os.path.join("speakAndSpell", "cache")
+VOICE_PATH = os.path.join("Assets", "speakAndSpell", "voiceLines")
+CACHE_PATH = os.path.join("Assets", "speakAndSpell", "cache")
 
 BAD_CHARS = list("\\/*:?\"\'<>|\n\r\t\b\f")
 
