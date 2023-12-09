@@ -54,15 +54,15 @@ def main():
                             vp.play()
                     elif l.isKeyword("pause"):
                         vp.pause()
-#                    elif isWord(query):
-#                        s.command(['k' + longToShort(query), .1])
+                    elif isWord(query):
+                        s.command(['k' + longToShort(query), .1])
                     else:
                         vp.say(b.think(queryList))
     except Exception as e:
-#        s.exit()
+        s.exit()
         raise e
 
 if __name__ == "__main__":
     main()
 
-#s.exit()
+s.exit()
