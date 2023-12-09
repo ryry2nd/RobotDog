@@ -1,11 +1,11 @@
-from servos import Servos, longToShort, isWord
+#from servos import Servos, longToShort, isWord
 from speakAndSpell import VideoPlayer, Listen
 
 WAKE_WORD = "dog"
 
 vp = VideoPlayer()
 l = Listen()
-s = Servos(['g', 0], ['z', 0])
+#s = Servos(['g', 0], ['z', 0])
 
 def getWordIndex(messageList, word):
     for i in range(len(messageList)):
@@ -19,6 +19,7 @@ def getAfter(messageList, word):
 
 def main():
     try:
+        vp.say("activated")
         while True:
             word, keyword = l.listen()
             wordList = word.split()
@@ -44,16 +45,16 @@ def main():
                 elif l.isKeyword("say"):
                     vp.say(''.join(getAfter(queryList, "say")))
                 
-                elif isWord(query):
-                    s.command(['k' + longToShort(query), .1])
+#                elif isWord(query):
+#                    s.command(['k' + longToShort(query), .1])
 
     except KeyboardInterrupt:
         return
     except Exception as e:
-        s.exit()
+#        s.exit()
         raise e
 
 if __name__ == "__main__":
     main()
 
-s.exit()
+#s.exit()

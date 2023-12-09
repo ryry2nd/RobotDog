@@ -14,12 +14,12 @@ class Listen:
             audio = self.rec.listen(source)
 
         try:
-            query = self.rec.recognize_google(audio, language="en-in")
+            query = self.rec.recognize_google(audio).lower()
         except UnknownValueError:
             return "", ""
         
         self.keyword.extract_keywords_from_text(query)
-        self.word = query.lower()
+        self.word = query
         return query, self.getKeywords()
     
     def isKeyword(self, str):
