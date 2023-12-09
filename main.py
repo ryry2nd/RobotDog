@@ -1,4 +1,4 @@
-#from servos import Servos, longToShort, isWord
+from servos import Servos, longToShort, isWord
 from speakAndSpell import VideoPlayer, Listen
 from dotenv import load_dotenv
 from brain import Brain
@@ -21,7 +21,7 @@ GPT_DEVICE = os.getenv("GPT_DEVICE")
 
 vp = VideoPlayer(VOICE_PATH, CACHE_PATH)
 l = Listen()
-#s = Servos(['g', 0], ['z', 0])
+s = Servos(['g', 0], ['z', 0])
 b = Brain(MODEL_NAME, MODEL_PATH, INIT_PROMPT, device=GPT_DEVICE)
 
 def getWordIndex(messageList, word):
@@ -37,7 +37,7 @@ def getAfter(messageList, word):
 def main():
     try:
         with b.session():
-            vp.say("activated")
+            vp.say("activated", "high_quality")
             while True:
                 word, keyword = l.listen()
                 wordList = word.split()
@@ -45,7 +45,7 @@ def main():
                 if keyword and l.isKeyword(WAKE_WORD):
                     query = " ".join(getAfter(wordList, WAKE_WORD))
                     if not query:
-                        vp.say("woof woof")
+                        vp.say("woof woof", "standard")
                         query, keyword = l.listen()
                         if not query:
                             continue
@@ -60,15 +60,15 @@ def main():
                             vp.play()
                     elif l.isKeyword("pause"):
                         vp.pause()
-#                    elif isWord(query):
-#                        s.command(['k' + longToShort(query), .1])
+                    elif isWord(query):
+                        s.command(['k' + longToShort(query), .1])
                     else:
                         vp.say(b.think(query))
     except Exception as e:
-#        s.exit()
+        s.exit()
         raise e
 
 if __name__ == "__main__":
     main()
 
-#s.exit()
+s.exit()

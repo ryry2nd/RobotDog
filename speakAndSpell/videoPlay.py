@@ -78,6 +78,6 @@ class VideoPlayer(AiVoice):
         self.volume = volume
         self.player.audio_set_volume(volume)
     
-    def say(self, text):
-        self.player.set_media(vlc.Media(super().generateVoice(text)))
+    def say(self, text:str, quality:str="ultra_fast"):
+        self.player.set_media(vlc.Media(super().generateVoice(text, quality)))
         self.play()

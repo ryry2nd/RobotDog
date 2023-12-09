@@ -19,12 +19,12 @@ class AiVoice:
     def convert_to_better_text(self, text):
         return ''.join(i for i in text.lower() if not i in BAD_CHARS)
 
-    def generateVoice(self, text):
+    def generateVoice(self, text, quality="ultra_fast"):
         text = self.convert_to_better_text(text)
         path = os.path.join(self.cache_path, text + '.wav')
 
         if not os.path.exists(path):
-            pcm_audio = self.tts.tts_with_preset(text, voice_samples=self.reference_clips, preset="ultra_fast")
+            pcm_audio = self.tts.tts_with_preset(text, voice_samples=self.reference_clips, preset=quality)
             torchaudio.save(path, pcm_audio.squeeze(0).cpu(), 24000)
         
         return path
