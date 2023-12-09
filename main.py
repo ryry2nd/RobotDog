@@ -1,4 +1,4 @@
-#from servos import Servos, longToShort, isWord
+from servos import Servos, longToShort, isWord
 from speakAndSpell import VideoPlayer, Listen
 from brain import Brain
 
@@ -6,7 +6,7 @@ WAKE_WORD = "kevin"
 
 vp = VideoPlayer()
 l = Listen()
-#s = Servos(['g', 0], ['z', 0])
+s = Servos(['g', 0], ['z', 0])
 b = Brain()
 
 def getWordIndex(messageList, word):
@@ -45,15 +45,15 @@ def main():
                             vp.play()
                     elif l.isKeyword("pause"):
                         vp.pause()
-    #                elif isWord(query):
-    #                    s.command(['k' + longToShort(query), .1])
+                    elif isWord(query):
+                        s.command(['k' + longToShort(query), .1])
                     else:
                         vp.say(b.think(queryList))
     except Exception as e:
-#        s.exit()
+        s.exit()
         raise e
 
 if __name__ == "__main__":
     main()
 
-#s.exit()
+s.exit()
