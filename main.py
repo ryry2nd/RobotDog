@@ -1,13 +1,22 @@
 from servos import Servos, longToShort, isWord
 from speakAndSpell import VideoPlayer, Listen
+from dotenv import load_dotenv
 from brain import Brain
+import os
 
-WAKE_WORD = "kevin"
+load_dotenv()
 
-vp = VideoPlayer()
+INIT_PROMPT = os.getenv('INIT_PROMPT')
+MODEL_NAME = os.getenv('MODEL_NAME')
+MODEL_PATH = os.getenv('MODEL_PATH')
+VOICE_PATH = os.getenv('VOICE_PATH')
+CACHE_PATH = os.getenv('CACHE_PATH')
+WAKE_WORD = os.getenv("WAKE_WORD").lower()
+
+vp = VideoPlayer(VOICE_PATH, CACHE_PATH)
 l = Listen()
 s = Servos(['g', 0], ['z', 0])
-b = Brain()
+b = Brain(MODEL_NAME, MODEL_PATH, INIT_PROMPT)
 
 def getWordIndex(messageList, word):
     for i in range(len(messageList)):
@@ -45,15 +54,15 @@ def main():
                             vp.play()
                     elif l.isKeyword("pause"):
                         vp.pause()
-                    elif isWord(query):
-                        s.command(['k' + longToShort(query), .1])
+#                    elif isWord(query):
+#                        s.command(['k' + longToShort(query), .1])
                     else:
                         vp.say(b.think(queryList))
     except Exception as e:
-        s.exit()
+#        s.exit()
         raise e
 
 if __name__ == "__main__":
     main()
 
-s.exit()
+#s.exit()
