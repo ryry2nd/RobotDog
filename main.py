@@ -41,6 +41,7 @@ threads = []
 def main():
     s.bind(('', PORT))
     s.listen(5)
+    print("its working")
 
     while True:
         c, addr = s.accept()
