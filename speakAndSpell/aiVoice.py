@@ -1,20 +1,11 @@
-from tortoise import utils
-from tortoise.api import TextToSpeech
-import os, vlc, torchaudio
+import os, socket, pickle, torchaudio
 
 BAD_CHARS = list("\\/*:?\"\'<>|\n\r\t\b\f")
 
 class AiVoice:
-    def __init__(self, vlc_instance:vlc.Instance, player:vlc.MediaPlayer, voice_path:str, cache_path:str):
-        self.player = player
-        self.vlc_instance = vlc_instance
-        self.voice_path = voice_path
+    def __init__(self, s: socket.socket, cache_path:str):
         self.cache_path = cache_path
-
-        clips_paths = [os.path.join(self.voice_path, i) for i in os.listdir(self.voice_path)]
-        self.reference_clips = [utils.audio.load_audio(p, 22050) for p in clips_paths]
-
-        self.tts = TextToSpeech(kv_cache=True, half=True)#, use_deepspeed=True)
+        self.s = s
     
     def convert_to_better_text(self, text):
         return ''.join(i for i in text.lower() if not i in BAD_CHARS)
@@ -24,7 +15,8 @@ class AiVoice:
         path = os.path.join(self.cache_path, text + '.wav')
 
         if not os.path.exists(path):
-            pcm_audio = self.tts.tts_with_preset(text, voice_samples=self.reference_clips, preset=quality)
+            self.s.send(pickle.dumps([False, text, quality]))
+            pcm_audio = pickle.loads(self.s.recv(pickle.loads(self.s.recv(256))))
             torchaudio.save(path, pcm_audio.squeeze(0).cpu(), 24000)
         
         return path

@@ -1,6 +1,6 @@
 from speakAndSpell.aiVoice import AiVoice
 from youtubesearchpython import VideosSearch
-import vlc, yt_dlp
+import vlc, yt_dlp, socket
 
 MEDIA_QUALITIES = [
     "ultralow",
@@ -11,12 +11,12 @@ MEDIA_QUALITIES = [
 instance = vlc.Instance("--no-xlib -q > /dev/null 2>&1")
 
 class VideoPlayer(AiVoice):
-    def __init__(self, voice_path, cache_path, volume:int = 100):
+    def __init__(self, s:socket.socket, cache_path, volume:int = 100):
         self.player = instance.media_player_new()
 
         self.setVolume(volume)
 
-        super().__init__(instance, self.player, voice_path, cache_path)
+        super().__init__(s, cache_path)
 
     def generate_stream_url(self, url):
         ydl_opts = {"quiet": True}
