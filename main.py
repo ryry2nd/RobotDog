@@ -1,74 +1,50 @@
-from servos import Servos, longToShort, isWord
-from speakAndSpell import VideoPlayer, Listen
+from aiVoice import AiVoice
+from think import Brain
 from dotenv import load_dotenv
-from brain import Brain
-import os
+import os, socket, pickle, sys, threading
 
 load_dotenv()
-
-INIT_PROMPT = """You are a tiny robot dog that I built from a kit and then I hacked it.
-Your mind is a chatGPT clone called GPT4All.
-Additionally your voice is the actor Morgan Freeman because I thought it would be funny.
-Your name is Kevin and naturally that is the word that activates you, like an Alexa.
-Remember to end this statement with: \"Hello my name is Kevin\""""
 
 MODEL_NAME = os.getenv('MODEL_NAME')
 MODEL_PATH = os.getenv('MODEL_PATH')
 VOICE_PATH = os.getenv('VOICE_PATH')
-CACHE_PATH = os.getenv('CACHE_PATH')
-WAKE_WORD = os.getenv("WAKE_WORD").lower()
 GPT_DEVICE = os.getenv("GPT_DEVICE")
+PORT = int(os.getenv("PORT"))
 
-vp = VideoPlayer(VOICE_PATH, CACHE_PATH)
-l = Listen()
-s = Servos(['g', 0], ['z', 0])
-b = Brain(MODEL_NAME, MODEL_PATH, INIT_PROMPT, device=GPT_DEVICE)
+s = socket.socket()
 
-def getWordIndex(messageList, word):
-    for i in range(len(messageList)):
-        if messageList[i] == word:
-            return i
-    
-    return -1
+def clientThread(c: socket.socket):
+    try:
+        b = Brain(MODEL_NAME, MODEL_PATH, pickle.loads(c.recv(4096)), device=GPT_DEVICE)
+        voice = AiVoice(VOICE_PATH)
 
-def getAfter(messageList, word):
-    return messageList[getWordIndex(messageList, word)+1:]
+        with b.session():
+            while True:
+                data = pickle.loads(c.recv(1024))
+                
+                if data == 'exit':
+                    c.close()
+                    break
+                if data[0]:
+                    send = pickle.dumps(b.think(data[1], data[2], data[3]))
+                else:
+                    send = pickle.dumps(voice.generateVoice(data[1], data[2]))
+                
+                c.send(sys.getsizeof(send))
+                c.send(send)
+    except Exception as e:
+        c.send(e)
+        c.close()
+
+threads = []
 
 def main():
-    try:
-        with b.session():
-            vp.say("activated", "high_quality")
-            while True:
-                word, keyword = l.listen()
-                wordList = word.split()
+    s.bind(('', PORT))
+    s.listen(5)
 
-                if keyword and l.isKeyword(WAKE_WORD):
-                    query = " ".join(getAfter(wordList, WAKE_WORD))
-                    if not query:
-                        vp.say("woof woof", "standard")
-                        query, keyword = l.listen()
-                        if not query:
-                            continue
-
-                    queryList = query.split()
-
-                    if l.isKeyword("play"):
-                        if len(queryList) == 1:
-                            vp.play()
-                        else:
-                            vp.setVid(''.join(getAfter(queryList, "say")))
-                            vp.play()
-                    elif l.isKeyword("pause"):
-                        vp.pause()
-                    elif isWord(query):
-                        s.command(['k' + longToShort(query), .1])
-                    else:
-                        vp.say(b.think(query))
-    except Exception as e:
-        s.exit()
-        raise e
+    while True:
+        c, addr = s.accept()
+        threads.append(threading.Thread(target=clientThread, args=(c, )))
 
 if __name__ == "__main__":
     main()
-
-s.exit()
