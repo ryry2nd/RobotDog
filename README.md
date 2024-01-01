@@ -13,13 +13,6 @@ python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"
 If on windows just run this:  
 `python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"`
 
-### AI Voice instructions
-If you want a certain voice go find voice clips of the person for instance Morgan Freeman, and put them in the wav format into the path:  
-`Assets/speekAndSpell/voiceLines`  
-  
-Click the link for more info about the AI voice software  
-https://github.com/neonbjb/tortoise-tts
-
 ### GPT4All instructions
 For the robot to be able to think for itself you have to download a model from the GPT4All website  
 The model I downloaded was `gpt4all-falcon-q4_0.gguf`  
