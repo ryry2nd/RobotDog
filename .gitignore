@@ -160,6 +160,4 @@ cython_debug/
 
 #my stuff
 .vscode
-voiceLines/
-cache/
-aiModel/
+models/

@@ -1,6 +1,5 @@
-from speakAndSpell.aiVoice import AiVoice
 from youtubesearchpython import VideosSearch
-import vlc, yt_dlp
+import vlc, yt_dlp, pyttsx3, threading
 
 MEDIA_QUALITIES = [
     "ultralow",
@@ -8,17 +7,17 @@ MEDIA_QUALITIES = [
     "medium",
 ]
 
+voice = pyttsx3.init()
+voice.startLoop(False)
+
 instance = vlc.Instance("--no-xlib -q > /dev/null 2>&1")
 
-class VideoPlayer(AiVoice):
-    def __init__(self, voice_path, cache_path, volume:int = 100):
+class VideoPlayer:
+    def __init__(self, volume:int = 100):
         self.player = instance.media_player_new()
-
         self.setVolume(volume)
 
-        super().__init__(instance, self.player, voice_path, cache_path)
-
-    def generate_stream_url(self, url):
+    def _generate_stream_url(self, url):
         ydl_opts = {"quiet": True}
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
@@ -55,6 +54,13 @@ class VideoPlayer(AiVoice):
                     break_out_flag = True
                     break
         return url
+    
+    def _runThread(self, text):
+        voice.stop()
+        if voice._inLoop:
+            voice.endLoop()
+        voice.say(text)
+        voice.runAndWait()
 
     def setVid(self, title):
         results = VideosSearch(title, limit=1).result()["result"]
@@ -68,16 +74,19 @@ class VideoPlayer(AiVoice):
     def play(self):
         self.player.play()
 
-    def pause(self):
-        self.player.pause()
-
     def getVolume(self):
         return self.volume
     
     def setVolume(self, volume:int):
         self.volume = volume
         self.player.audio_set_volume(volume)
+        voice.setProperty('volume', volume/100)
+
+    def say(self, text:str, wait:bool=False):
+        if wait:
+            self._runThread(text)
+        else:
+            threading.Thread(target=self._runThread, args=(text,)).start()
     
-    def say(self, text:str, quality:str="ultra_fast"):
-        self.player.set_media(vlc.Media(super().generateVoice(text, quality)))
-        self.play()
+    def stop(self):
+        self.player.pause()

@@ -6,20 +6,17 @@ import os
 
 load_dotenv()
 
-INIT_PROMPT = """You are a tiny robot dog that I built from a kit and then I hacked it.
+INIT_PROMPT = """You are a tiny robot dog named Kevin that your creator built from a kit and then he hacked it by slapping a raspberry pi on the board that normally controls you and used the api for the kit to use your limbs.
 Your mind is a chatGPT clone called GPT4All.
-Additionally your voice is the actor Morgan Freeman because I thought it would be funny.
-Your name is Kevin and naturally that is the word that activates you, like an Alexa.
-Remember to end this statement with: \"Hello my name is Kevin\""""
+You are entirely coded in python because it has all of the libraries you need.
+Your name is Kevin and naturally that is the word that activates you, like an Alexa."""
 
 MODEL_NAME = os.getenv('MODEL_NAME')
 MODEL_PATH = os.getenv('MODEL_PATH')
-VOICE_PATH = os.getenv('VOICE_PATH')
-CACHE_PATH = os.getenv('CACHE_PATH')
 WAKE_WORD = os.getenv("WAKE_WORD").lower()
 GPT_DEVICE = os.getenv("GPT_DEVICE")
 
-vp = VideoPlayer(VOICE_PATH, CACHE_PATH)
+vp = VideoPlayer()
 l = Listen()
 s = Servos(['g', 0], ['z', 0])
 b = Brain(MODEL_NAME, MODEL_PATH, INIT_PROMPT, device=GPT_DEVICE)
@@ -37,33 +34,36 @@ def getAfter(messageList, word):
 def main():
     try:
         with b.session():
-            vp.say("activated", "high_quality")
+            vp.say("activated", True)
             while True:
-                word, keyword = l.listen()
-                wordList = word.split()
+                query, keyword = l.listen()
 
                 if keyword and l.isKeyword(WAKE_WORD):
-                    query = " ".join(getAfter(wordList, WAKE_WORD))
-                    if not query:
-                        vp.say("woof woof", "standard")
+                    if query == WAKE_WORD:
+                        vp.say("woof woof")
                         query, keyword = l.listen()
                         if not query:
                             continue
 
                     queryList = query.split()
-
-                    if l.isKeyword("play"):
+                    if l.isKeyword("stop", "pause"):
+                        vp.stop()
+                    elif l.isKeyword("play"):
                         if len(queryList) == 1:
                             vp.play()
                         else:
                             vp.setVid(''.join(getAfter(queryList, "say")))
                             vp.play()
-                    elif l.isKeyword("pause"):
-                        vp.pause()
                     elif isWord(query):
                         s.command(['k' + longToShort(query), .1])
                     else:
-                        vp.say(b.think(query))
+                        gen = b.think(query, streaming=True)
+                        text = ""
+                        for i in gen:
+                            print(i, end='')
+                            text += i
+                        print()
+                        vp.say(text)
     except Exception as e:
         s.exit()
         raise e

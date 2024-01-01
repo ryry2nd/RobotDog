@@ -8,5 +8,10 @@ class Brain:
     def session(self):
         return self.model.chat_session(self.starting_prompt)
 
-    def think(self, prompt:str, *args, **kwargs):
-        return self.model.generate(prompt=prompt, *args, **kwargs)
+    def think(self, prompt:str, streaming:str=False, *args, **kwargs):
+        ret = self.model.generate(prompt=prompt, streaming=streaming, *args, **kwargs)
+        if streaming:
+            for i in ret:
+                yield i
+        else:
+            return ret
