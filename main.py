@@ -1,6 +1,6 @@
 from think import Brain
 from dotenv import load_dotenv
-import os, socket, pickle, sys, threading
+import os, socket, pickle, threading
 
 load_dotenv()
 
@@ -22,7 +22,7 @@ def clientThread(c: socket.socket):
                 if data == 'exit':
                     c.close()
                     break
-                c.send(pickle.dumps(b.think(data[1], data[2], data[3])))
+                c.send(pickle.dumps(b.think(data[0], data[1], data[2])))
     except Exception as e:
         c.send(e)
         c.close()
