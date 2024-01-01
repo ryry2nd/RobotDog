@@ -9,16 +9,14 @@ class Listen:
         self.word = ""
 
     def listen(self):
-        # with sr.Microphone() as source:
-        #     self.rec.adjust_for_ambient_noise(source)
-        #     audio = self.rec.listen(source)
+        with sr.Microphone() as source:
+            self.rec.adjust_for_ambient_noise(source)
+            audio = self.rec.listen(source)
 
-        # try:
-        #     query = self.rec.recognize_google(audio).lower()
-        # except UnknownValueError:
-        #     return "", ""
-
-        query = input(">")
+        try:
+            query = self.rec.recognize_google(audio).lower()
+        except UnknownValueError:
+            return "", ""
         
         self.keyword.extract_keywords_from_text(query)
         self.word = query
