@@ -23,7 +23,7 @@ s.bind((ip, PORT))
 s.send(pickle.dumps(INIT_PROMPT))
 
 
-vp = VideoPlayer(s, CACHE_PATH)
+vp = VideoPlayer(s)
 b = Brain(s)
 l = Listen()
 s = Servos(['g', 0], ['z', 0])
