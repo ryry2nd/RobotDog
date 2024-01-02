@@ -1,4 +1,4 @@
-# from servos import Servos, longToShort, isWord
+from servos import Servos, longToShort, isWord
 from speakAndSpell import VideoPlayer, Listen
 from brain import Brain
 from dotenv import load_dotenv
@@ -15,6 +15,7 @@ WAKE_WORD = os.getenv("WAKE_WORD").lower()
 PORT = int(os.getenv('PORT'))
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.settimeout(5000)
 
 ip = input("HostIP: ")
 
@@ -26,7 +27,7 @@ s.send(pickle.dumps(INIT_PROMPT))
 vp = VideoPlayer()
 b = Brain(s)
 l = Listen()
-# s = Servos(['g', 0], ['z', 0])
+s = Servos(['g', 0], ['z', 0])
 
 def getWordIndex(messageList, word):
     for i in range(len(messageList)):
@@ -60,15 +61,15 @@ def main():
                     else:
                         vp.setVid(''.join(getAfter(queryList, "say")))
                         vp.play()
-                # elif isWord(query):
-                #     s.command(['k' + longToShort(query), .1])
+                elif isWord(query):
+                    s.command(['k' + longToShort(query), .1])
                 else:
                     vp.say(b.think(query))
     except Exception as e:
-        # s.exit()
+        s.exit()
         raise e
 
 if __name__ == "__main__":
     main()
 
-# s.exit()
+s.exit()
