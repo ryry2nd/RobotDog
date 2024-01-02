@@ -13,12 +13,18 @@ Your name is Kevin and naturally that is the word that activates you, like an Al
 
 WAKE_WORD = os.getenv("WAKE_WORD").lower()
 PORT = int(os.getenv('PORT'))
+IP = ""
+
+if os.path.isfile("targetIP.txt"):
+    with open("targetIP.txt") as f:
+        IP = f.read()
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-ip = input("HostIP: ")
+if not IP:
+    IP = input("HostIP: ")
 
-s.bind((ip, PORT))
+s.bind((IP, PORT))
 
 s.send(pickle.dumps(INIT_PROMPT))
 

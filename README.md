@@ -11,7 +11,9 @@ sudo apt install flac
 python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"
 ```
 If on windows just run this:  
-`python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"`
+`python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"`  
+  
+If you want to you can make a file called targetIp.txt to automatically type in the target ip address of the server.
 
 ### GPT4All instructions
 For the robot to be able to think for itself you have to download a model from the GPT4All website  
