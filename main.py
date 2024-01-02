@@ -18,13 +18,14 @@ def clientThread(c: socket.socket):
         with b.session():
             while True:
                 data = pickle.loads(c.recv(1024))
+                print(data)
                 
                 if data == 'exit':
                     c.close()
                     break
-                c.send(pickle.dumps(b.think(data[0], data[1], data[2])))
+                c.send(pickle.dumps(b.think(prompt=data[0], *data[1], **data[2])))
     except Exception as e:
-        c.send(e)
+        print(e)
         c.close()
 
 threads = []
@@ -37,6 +38,7 @@ def main():
     while True:
         c, addr = s.accept()
         threads.append(threading.Thread(target=clientThread, args=(c, )))
+        threads[-1].start()
 
 if __name__ == "__main__":
     main()
