@@ -1,5 +1,5 @@
 from youtubesearchpython import VideosSearch
-import vlc, yt_dlp, pyttsx3, threading
+import vlc, yt_dlp, pyttsx3
 
 MEDIA_QUALITIES = [
     "ultralow",
