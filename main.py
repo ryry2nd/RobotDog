@@ -34,7 +34,7 @@ def getAfter(messageList, word):
 def main():
     try:
         with b.session():
-            vp.say("activated", True)
+            vp.say("activated")
             while True:
                 query, keyword = l.listen()
 
