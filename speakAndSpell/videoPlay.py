@@ -8,7 +8,6 @@ MEDIA_QUALITIES = [
 ]
 
 voice = pyttsx3.init()
-voice.startLoop(False)
 
 instance = vlc.Instance("--no-xlib -q > /dev/null 2>&1")
 
@@ -54,13 +53,6 @@ class VideoPlayer:
                     break_out_flag = True
                     break
         return url
-    
-    def _runThread(self, text):
-        voice.stop()
-        if voice._inLoop:
-            voice.endLoop()
-        voice.say(text)
-        voice.runAndWait()
 
     def setVid(self, title):
         results = VideosSearch(title, limit=1).result()["result"]
@@ -82,11 +74,10 @@ class VideoPlayer:
         self.player.audio_set_volume(volume)
         voice.setProperty('volume', volume/100)
 
-    def say(self, text:str, wait:bool=False):
-        if wait:
-            self._runThread(text)
-        else:
-            threading.Thread(target=self._runThread, args=(text,)).start()
+    def say(self, text:str):
+        voice.stop()
+        voice.say(text)
+        voice.runAndWait()
     
     def stop(self):
         self.player.pause()

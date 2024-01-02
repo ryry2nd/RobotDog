@@ -1,4 +1,4 @@
-from servos import Servos, longToShort, isWord
+# from servos import Servos, longToShort, isWord
 from speakAndSpell import VideoPlayer, Listen
 from dotenv import load_dotenv
 from brain import Brain
@@ -18,7 +18,7 @@ GPT_DEVICE = os.getenv("GPT_DEVICE")
 
 vp = VideoPlayer()
 l = Listen()
-s = Servos(['g', 0], ['z', 0])
+# s = Servos(['g', 0], ['z', 0])
 b = Brain(MODEL_NAME, MODEL_PATH, INIT_PROMPT, device=GPT_DEVICE)
 
 def getWordIndex(messageList, word):
@@ -54,8 +54,8 @@ def main():
                         else:
                             vp.setVid(''.join(getAfter(queryList, "say")))
                             vp.play()
-                    elif isWord(query):
-                        s.command(['k' + longToShort(query), .1])
+                    # elif isWord(query):
+                    #     s.command(['k' + longToShort(query), .1])
                     else:
                         gen = b.think(query, streaming=True)
                         text = ""
@@ -65,10 +65,10 @@ def main():
                         print()
                         vp.say(text)
     except Exception as e:
-        s.exit()
+        # s.exit()
         raise e
 
 if __name__ == "__main__":
     main()
 
-s.exit()
+# s.exit()
