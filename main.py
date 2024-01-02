@@ -1,4 +1,4 @@
-from servos import Servos, longToShort, isWord
+# from servos import Servos, longToShort, isWord
 from speakAndSpell import VideoPlayer, Listen
 from brain import Brain
 from dotenv import load_dotenv
@@ -18,15 +18,15 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 ip = input("HostIP: ")
 
-s.bind((ip, PORT))
+s.connect((ip, PORT))
 
 s.send(pickle.dumps(INIT_PROMPT))
 
 
-vp = VideoPlayer(s)
+vp = VideoPlayer()
 b = Brain(s)
 l = Listen()
-s = Servos(['g', 0], ['z', 0])
+# s = Servos(['g', 0], ['z', 0])
 
 def getWordIndex(messageList, word):
     for i in range(len(messageList)):
@@ -40,36 +40,35 @@ def getAfter(messageList, word):
 
 def main():
     try:
-        with b.session():
-            vp.say("activated", True)
-            while True:
-                query, keyword = l.listen()
+        vp.say("activated")
+        while True:
+            query, keyword = l.listen()
 
-                if keyword and l.isKeyword(WAKE_WORD):
-                    if query == WAKE_WORD:
-                        vp.say("woof woof")
-                        query, keyword = l.listen()
-                        if not query:
-                            continue
+            if keyword and l.isKeyword(WAKE_WORD):
+                if query == WAKE_WORD:
+                    vp.say("woof woof")
+                    query, keyword = l.listen()
+                    if not query:
+                        continue
 
-                    queryList = query.split()
-                    if l.isKeyword("stop", "pause"):
-                        vp.stop()
-                    elif l.isKeyword("play"):
-                        if len(queryList) == 1:
-                            vp.play()
-                        else:
-                            vp.setVid(''.join(getAfter(queryList, "say")))
-                            vp.play()
-                    elif isWord(query):
-                        s.command(['k' + longToShort(query), .1])
+                queryList = query.split()
+                if l.isKeyword("stop", "pause"):
+                    vp.stop()
+                elif l.isKeyword("play"):
+                    if len(queryList) == 1:
+                        vp.play()
                     else:
-                        vp.say(b.think(query))
+                        vp.setVid(''.join(getAfter(queryList, "say")))
+                        vp.play()
+                # elif isWord(query):
+                #     s.command(['k' + longToShort(query), .1])
+                else:
+                    vp.say(b.think(query))
     except Exception as e:
-        s.exit()
+        # s.exit()
         raise e
 
 if __name__ == "__main__":
     main()
 
-s.exit()
+# s.exit()
