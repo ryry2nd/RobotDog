@@ -22,10 +22,11 @@ class Listen:
         self.word = query
         return query, self.getKeywords()
     
-    def isKeyword(self, str):
+    def isKeyword(self, *str:str):
         for i in self.keyword.get_ranked_phrases():
-            if str in i.split():
-                return True
+            for s in str:
+                if s in i.split():
+                    return True
         
         return False
     
