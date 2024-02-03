@@ -54,8 +54,8 @@ def main():
                         else:
                             vp.setVid(''.join(getAfter(queryList, "say")))
                             vp.play()
-                    elif isWord(query):
-                        s.command(['k' + longToShort(query), .1])
+                    elif isWord(*query.split(WAKE_WORD)):
+                        s.command(['k' + longToShort(*query.split(WAKE_WORD)), .1])
                     else:
                         gen = b.think(query, streaming=True)
                         text = ""
